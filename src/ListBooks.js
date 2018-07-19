@@ -15,7 +15,7 @@ class ListBooks extends Component {
 
   filterByShelf = shelf => {
     const allBooks = this.state.books;
-    return allBooks.filter(book => book.shelf == shelf);
+    return allBooks.filter(book => book.shelf === shelf);
   };
 
   render() {
