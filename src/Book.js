@@ -14,7 +14,11 @@ class Book extends Component {
               backgroundImage: `url(${this.props.image})`
             }}
           />
-          <ShelfBook />
+          <ShelfBook
+            onChangeShelf={this.props.onChangeShelf}
+            book={this.props.book}
+            shelf={this.props.shelf}
+          />
         </div>
         <div className="book-title">{this.props.title}</div>
         <div className="book-authors">{this.props.authors}</div>
