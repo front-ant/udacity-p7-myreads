@@ -1,19 +1,21 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
 
-class CategorizeBook extends Component {
+class ShelfBook extends Component {
   render() {
-    return(
+    return (
       <div className="book-shelf-changer">
         <select>
-          <option value="move" disabled>Move to...</option>
+          <option value="move" disabled>
+            Move to...
+          </option>
           <option value="currentlyReading">Currently Reading</option>
           <option value="wantToRead">Want to Read</option>
           <option value="read">Read</option>
           <option value="none">None</option>
         </select>
       </div>
-    )
+    );
   }
 }
 
-export default CategorizeBook
+export default ShelfBook;
