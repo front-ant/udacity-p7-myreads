@@ -1,10 +1,14 @@
 import React, {Component} from 'react';
+import * as BooksAPI from './BooksAPI';
 
 class ShelfBook extends Component {
   render() {
     return (
       <div className="book-shelf-changer">
-        <select>
+        <select
+          onChange={event => {
+            this.changeShelf(event.target.value);
+          }}>
           <option value="move" disabled>
             Move to...
           </option>

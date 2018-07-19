@@ -1,20 +1,9 @@
 import React, {Component} from 'react';
 import BookShelf from './Bookshelf';
-import * as BooksAPI from './BooksAPI';
 
 class ListBooks extends Component {
-  state = {
-    books: []
-  };
-
-  componentDidMount() {
-    BooksAPI.getAll().then(books => {
-      this.setState({books});
-    });
-  }
-
   filterByShelf = shelf => {
-    const allBooks = this.state.books;
+    const allBooks = this.props.books;
     return allBooks.filter(book => book.shelf === shelf);
   };
 
