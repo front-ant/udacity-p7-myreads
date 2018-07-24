@@ -29,6 +29,11 @@ class ListBooks extends Component {
             shelvedBooks={this.filterByShelf('read')}
             onChangeShelf={this.props.onChangeShelf}
           />
+          <BookShelf
+            title={'Uncategorized'}
+            shelvedBooks={this.filterByShelf('none')}
+            onChangeShelf={this.props.onChangeShelf}
+          />
         </div>
       </div>
     );

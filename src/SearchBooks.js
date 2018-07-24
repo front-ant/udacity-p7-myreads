@@ -1,7 +1,17 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
+import escapeRegExp from 'escape-string-regexp';
+import Book from './Book';
 
 class SearchBooks extends Component {
+  state = {
+    query: ''
+  };
+
+  updateQuery = query => {
+    this.setState({query: query.trim()});
+  };
+
   render() {
     return (
       <div className="search-books">
@@ -18,11 +28,31 @@ class SearchBooks extends Component {
         However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
         you don't find a specific author or title. Every search is limited by search terms.
       */}
-            <input type="text" placeholder="Search by title or author" />
+            <input
+              type="text"
+              placeholder="Search by title or author"
+              value={this.state.query}
+              onChange={event => {
+                this.updateQuery(event.target.value);
+              }}
+            />
           </div>
         </div>
         <div className="search-books-results">
-          <ol className="books-grid" />
+          <ol className="books-grid">
+            {this.props.books.map(book => (
+              <li key={book.id}>
+                <Book
+                  title={book.title}
+                  authors={book.authors}
+                  image={book.imageLinks.thumbnail}
+                  book={book}
+                  onChangeShelf={this.props.onChangeShelf}
+                  shelf={book.shelf}
+                />
+              </li>
+            ))}
+          </ol>
         </div>
       </div>
     );
