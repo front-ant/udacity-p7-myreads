@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import escapeRegExp from 'escape-string-regexp';
+// import escapeRegExp from 'escape-string-regexp';
 import Book from './Book';
 import * as BooksAPI from './BooksAPI'
+import ShelfBook from './ShelfBook'
 
 class SearchBooks extends Component {
   state = {
@@ -10,17 +11,33 @@ class SearchBooks extends Component {
     books: []
   };
 
+  componentDidMount() {
+    BooksAPI.getAll().then(books => {
+      this.setState({books});
+    });
+  }
 
 onSearchInput = event => {
   this.setState({query: event.target.value});
   if (this.state.query) {
   BooksAPI.search(this.state.query)
   .then((newBooks) => {
-    this.setState({books: newBooks});
+    this.setState((state) => ({
+    books: state.books.concat(newBooks)
+    }));
     console.log(this.state.query)
     console.log(this.state.books);
   })
 }
+}
+
+checkShelf = (id) => {
+  BooksAPI.get(id).then((book) => {
+if (book.shelf) {
+  return book.shelf;
+} else {
+  return 'none';
+} })
 }
 
 
@@ -32,6 +49,7 @@ onSearchInput = event => {
     else {
       showingBooks = [];
     }
+
 
     return (
       <div className="search-books">
@@ -58,7 +76,7 @@ onSearchInput = event => {
                   image={book.imageLinks.thumbnail}
                   book={book}
                   onChangeShelf={this.props.onChangeShelf}
-                  shelf={book.shelf}
+                  shelf={(book.shelf) ? (book.shelf) : ('none')}
                 />
               </li>
             ))}
