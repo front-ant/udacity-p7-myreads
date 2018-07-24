@@ -2,33 +2,35 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import escapeRegExp from 'escape-string-regexp';
 import Book from './Book';
-import ShelfBook from './ShelfBook'
 import * as BooksAPI from './BooksAPI'
 
 class SearchBooks extends Component {
   state = {
     query: '',
-    books: this.props.books
+    books: []
   };
 
-  updateQuery = query => {
-    this.setState({query: query.trim()});
-  };
 
-  componentDidMount() {
-    BooksAPI.getAll().then(books => {
-      this.setState({books});
-    });
-  }
+onSearchInput = event => {
+  this.setState({query: event.target.value});
+  if (this.state.query) {
+  BooksAPI.search(this.state.query)
+  .then((newBooks) => {
+    this.setState({books: newBooks});
+    console.log(this.state.query)
+    console.log(this.state.books);
+  })
+}
+}
+
 
   render() {
-    let foundBooks;
-    if (this.state.query) {
-      const match = new RegExp(escapeRegExp(this.state.query), 'i')
-      foundBooks = this.props.books.filter((book => match.test(book.title)))
+    let showingBooks;
+    if (this.state.books.length > 0) {
+      showingBooks = this.state.books;
     }
     else {
-      foundBooks = this.props.books;
+      showingBooks = [];
     }
 
     return (
@@ -38,31 +40,17 @@ class SearchBooks extends Component {
             Close
           </Link>
           <div className="search-books-input-wrapper">
-            {/*
-        NOTES: The search from BooksAPI is limited to a particular set of search terms.
-        You can find these search terms here:
-        https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-        However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-        you don't find a specific author or title. Every search is limited by search terms.
-      */}
             <input
               type="text"
               placeholder="Search by title or author"
+              onChange={this.onSearchInput}
               value={this.state.query}
-              onChange={event => {
-                this.updateQuery(event.target.value);
-                BooksAPI.search(this.state.query)
-                .then(() => {
-                  console.log(this.state.query);
-                });
-              }}
             />
           </div>
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {foundBooks.map(book => (
+            {showingBooks.map(book => (
               <li key={book.id}>
                 <Book
                   title={book.title}
