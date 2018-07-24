@@ -2,15 +2,24 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import escapeRegExp from 'escape-string-regexp';
 import Book from './Book';
+import ShelfBook from './ShelfBook'
+import * as BooksAPI from './BooksAPI'
 
 class SearchBooks extends Component {
   state = {
-    query: ''
+    query: '',
+    books: this.props.books
   };
 
   updateQuery = query => {
     this.setState({query: query.trim()});
   };
+
+  componentDidMount() {
+    BooksAPI.getAll().then(books => {
+      this.setState({books});
+    });
+  }
 
   render() {
     return (
@@ -34,13 +43,17 @@ class SearchBooks extends Component {
               value={this.state.query}
               onChange={event => {
                 this.updateQuery(event.target.value);
+                BooksAPI.search(this.state.query)
+                // .then(books => {
+                //   this.setState({books});
+                // });
               }}
             />
           </div>
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {this.props.books.map(book => (
+            {this.state.books.map(book => (
               <li key={book.id}>
                 <Book
                   title={book.title}
