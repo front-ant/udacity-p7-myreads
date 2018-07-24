@@ -22,6 +22,15 @@ class SearchBooks extends Component {
   }
 
   render() {
+    let foundBooks;
+    if (this.state.query) {
+      const match = new RegExp(escapeRegExp(this.state.query), 'i')
+      foundBooks = this.props.books.filter((book => match.test(book.title)))
+    }
+    else {
+      foundBooks = this.props.books;
+    }
+
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -44,16 +53,16 @@ class SearchBooks extends Component {
               onChange={event => {
                 this.updateQuery(event.target.value);
                 BooksAPI.search(this.state.query)
-                // .then(books => {
-                //   this.setState({books});
-                // });
+                .then(() => {
+                  console.log(this.state.query);
+                });
               }}
             />
           </div>
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {this.state.books.map(book => (
+            {foundBooks.map(book => (
               <li key={book.id}>
                 <Book
                   title={book.title}
