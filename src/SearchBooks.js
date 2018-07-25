@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 // import escapeRegExp from 'escape-string-regexp';
 import Book from './Book';
-import * as BooksAPI from './BooksAPI'
-import ShelfBook from './ShelfBook'
+import * as BooksAPI from './BooksAPI';
+import ShelfBook from './ShelfBook';
 
 class SearchBooks extends Component {
   state = {
@@ -11,45 +11,22 @@ class SearchBooks extends Component {
     books: []
   };
 
-  componentDidMount() {
-    BooksAPI.getAll().then(books => {
-      this.setState({books});
-    });
-  }
-
-onSearchInput = event => {
-  this.setState({query: event.target.value});
-  if (this.state.query) {
-  BooksAPI.search(this.state.query)
-  .then((newBooks) => {
-    this.setState((state) => ({
-    books: state.books.concat(newBooks)
-    }));
-    console.log(this.state.query)
-    console.log(this.state.books);
-  })
-}
-}
-
-checkShelf = (id) => {
-  BooksAPI.get(id).then((book) => {
-if (book.shelf) {
-  return book.shelf;
-} else {
-  return 'none';
-} })
-}
-
+  updateQuery = query => {
+    this.setState({query});
+    if (this.state.query) {
+      BooksAPI.search(this.state.query).then(books => {
+        this.setState({books});
+      });
+    }
+  };
 
   render() {
     let showingBooks;
-    if (this.state.books.length > 0) {
+    if (Array.isArray(this.state.books) && this.state.query !== '') {
       showingBooks = this.state.books;
-    }
-    else {
+    } else {
       showingBooks = [];
     }
-
 
     return (
       <div className="search-books">
@@ -61,8 +38,8 @@ if (book.shelf) {
             <input
               type="text"
               placeholder="Search by title or author"
-              onChange={this.onSearchInput}
               value={this.state.query}
+              onChange={event => this.updateQuery(event.target.value)}
             />
           </div>
         </div>
@@ -76,7 +53,7 @@ if (book.shelf) {
                   image={book.imageLinks.thumbnail}
                   book={book}
                   onChangeShelf={this.props.onChangeShelf}
-                  shelf={(book.shelf) ? (book.shelf) : ('none')}
+                  shelf={book.shelf ? book.shelf : 'none'}
                 />
               </li>
             ))}
