@@ -11,6 +11,7 @@ class SearchBooks extends Component {
     books: []
   };
 
+<<<<<<< HEAD
   updateQuery = query => {
     this.setState({query});
     if (this.state.query) {
@@ -19,6 +20,56 @@ class SearchBooks extends Component {
       });
     }
   };
+||||||| merged common ancestors
+  componentDidMount() {
+    BooksAPI.getAll().then(books => {
+      this.setState({books});
+    });
+  }
+
+onSearchInput = event => {
+  this.setState({query: event.target.value});
+  if (this.state.query) {
+  BooksAPI.search(this.state.query)
+  .then((newBooks) => {
+    this.setState((state) => ({
+    books: state.books.concat(newBooks)
+    }));
+    console.log(this.state.query)
+    console.log(this.state.books);
+  })
+}
+}
+
+checkShelf = (id) => {
+  BooksAPI.get(id).then((book) => {
+if (book.shelf) {
+  return book.shelf;
+} else {
+  return 'none';
+} })
+}
+
+=======
+  updateQuery = query => {
+    this.setState({query});
+    // if (this.state.query) {
+    //   BooksAPI.search(this.state.query).then(books => {
+    //     this.setState({books});
+    //     console.log(this.state.books);
+    //   });
+    // }
+  };
+
+  componentDidUpdate() {
+    if (this.state.query) {
+      BooksAPI.search(this.state.query).then(books => {
+        this.setState({books});
+        console.log(this.state.books);
+      });
+    }
+  }
+>>>>>>> 91f1b9df67431a5270848714da36b47f05940c65
 
   render() {
     let showingBooks;
