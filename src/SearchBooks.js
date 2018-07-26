@@ -9,8 +9,9 @@ class SearchBooks extends Component {
     query: '',
     books: []
   };
-
-  updateQuery = query => {
+  // Update query and look for matching books
+  // question: should maybe be split up into two functions? Should performSearch rather be located in App.js?
+  performSearch = query => {
     this.setState({query});
     if (this.state.query) {
       BooksAPI.search(this.state.query).then(books => {
@@ -21,13 +22,17 @@ class SearchBooks extends Component {
 
   render() {
     let showingBooks;
+
+    // check if the array of the search results wasn't empty
     if (Array.isArray(this.state.books) && this.state.query !== '') {
       let booksOnShelf = this.props.books;
       let foundBooks = this.state.books;
+
+      // map over the found books
       showingBooks = foundBooks.map(book => {
-        const bookInCollection = booksOnShelf.find(b => b.id === book.id);
+        const bookInCollection = booksOnShelf.find(b => b.id === book.id); //check if the book is already shelved
         if (bookInCollection) {
-          book.shelf = bookInCollection.shelf;
+          book.shelf = bookInCollection.shelf; // if yes, assign the found book the shelf from the one already in the collection
         } else {
           book.shelf = 'none';
         }
@@ -48,7 +53,7 @@ class SearchBooks extends Component {
               type="text"
               placeholder="Search by title or author"
               value={this.state.query}
-              onChange={event => this.updateQuery(event.target.value)}
+              onChange={event => this.performSearch(event.target.value)}
             />
           </div>
         </div>

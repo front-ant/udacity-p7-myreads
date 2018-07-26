@@ -10,12 +10,14 @@ class BooksApp extends React.Component {
     books: []
   };
 
+  // Get currently shelved books and set the initial state
   componentDidMount() {
     BooksAPI.getAll().then(books => {
       this.setState({books});
     });
   }
 
+  // function that will be called once the shelf is changed on a single book
   updateBook = (book, shelf) => {
     BooksAPI.update(book, shelf);
     BooksAPI.getAll().then(books => {
@@ -29,7 +31,12 @@ class BooksApp extends React.Component {
         <Route
           exact
           path="/search"
-          render={() => <SearchBooks books={this.state.books} onChangeShelf={this.updateBook} />}
+          render={() => (
+            <SearchBooks
+              books={this.state.books}
+              onChangeShelf={this.updateBook}
+            />
+          )}
         />
         <Route
           exact
