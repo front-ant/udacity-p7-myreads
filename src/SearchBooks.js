@@ -22,7 +22,17 @@ class SearchBooks extends Component {
   render() {
     let showingBooks;
     if (Array.isArray(this.state.books) && this.state.query !== '') {
-      showingBooks = this.state.books;
+      let booksOnShelf = this.props.books;
+      let foundBooks = this.state.books;
+      showingBooks = foundBooks.map(book => {
+        const bookInCollection = booksOnShelf.find(b => b.id === book.id);
+        if (bookInCollection) {
+          book.shelf = bookInCollection.shelf;
+        } else {
+          book.shelf = 'none';
+        }
+        return book;
+      });
     } else {
       showingBooks = [];
     }
