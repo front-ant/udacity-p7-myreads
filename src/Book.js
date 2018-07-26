@@ -3,6 +3,7 @@ import ShelfBook from './ShelfBook';
 
 function Book(props) {
   const {book} = props;
+  // check for existing cover image, load placeholder if necessary
   let bookImage;
   if (book.imageLinks) {
     bookImage = book.imageLinks.thumbnail;

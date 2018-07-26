@@ -8,7 +8,9 @@ class ShelfBook extends Component {
   handleChange = event => {
     const newShelf = event.target.value;
     const currentBook = this.props.book;
+    // call onChangeShelf method that was passed down from App.js, causing a rerender
     this.props.onChangeShelf(currentBook, newShelf);
+    // also update the state so that the newly selected shelf will be highlighted
     this.setState({currentShelf: newShelf});
   };
 
