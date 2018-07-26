@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-// import escapeRegExp from 'escape-string-regexp';
 import Book from './Book';
 import * as BooksAPI from './BooksAPI';
+import debounce from 'lodash.debounce';
 
 class SearchBooks extends Component {
   state = {
@@ -12,13 +12,23 @@ class SearchBooks extends Component {
   // Update query and look for matching books
   // question: should maybe be split up into two functions? Should performSearch rather be located in App.js?
   performSearch = query => {
-    this.setState({query});
     if (this.state.query) {
       BooksAPI.search(this.state.query).then(books => {
         this.setState({books});
       });
     }
   };
+
+  performSearchDebounced = debounce(this.performSearch, 150);
+
+  handleChange = event => {
+    this.setState({query: event.target.value});
+    this.performSearchDebounced(this.state.query);
+  };
+
+  componentWillUnmount() {
+    this.performSearchDebounced.cancel();
+  }
 
   render() {
     let showingBooks;
@@ -53,7 +63,7 @@ class SearchBooks extends Component {
               type="text"
               placeholder="Search by title or author"
               value={this.state.query}
-              onChange={event => this.performSearch(event.target.value)}
+              onChange={this.handleChange}
             />
           </div>
         </div>
