@@ -3,6 +3,14 @@ import ShelfBook from './ShelfBook';
 
 class Book extends Component {
   render() {
+    const {book} = this.props;
+    let bookImage;
+    if (book.imageLinks) {
+      bookImage = book.imageLinks.thumbnail;
+    } else {
+      bookImage =
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Book_question2.svg/200px-Book_question2.svg.png';
+    }
     return (
       <div className="book">
         <div className="book-top">
@@ -11,7 +19,7 @@ class Book extends Component {
             style={{
               width: 128,
               height: 193,
-              backgroundImage: `url(${this.props.image})`
+              backgroundImage: `url('${bookImage}')`
             }}
           />
           <ShelfBook
@@ -20,8 +28,8 @@ class Book extends Component {
             shelf={this.props.shelf}
           />
         </div>
-        <div className="book-title">{this.props.title}</div>
-        <div className="book-authors">{this.props.authors}</div>
+        <div className="book-title">{book.title}</div>
+        <div className="book-authors">{book.authors}</div>
       </div>
     );
   }

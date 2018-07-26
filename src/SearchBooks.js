@@ -57,9 +57,6 @@ class SearchBooks extends Component {
             {showingBooks.map(book => (
               <li key={book.id}>
                 <Book
-                  title={book.title}
-                  authors={book.authors}
-                  image={book.imageLinks.thumbnail}
                   book={book}
                   onChangeShelf={this.props.onChangeShelf}
                   shelf={book.shelf}
