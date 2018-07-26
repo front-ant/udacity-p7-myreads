@@ -19,9 +19,10 @@ class BooksApp extends React.Component {
 
   // function that will be called once the shelf is changed on a single book
   updateBook = (book, shelf) => {
-    BooksAPI.update(book, shelf);
-    BooksAPI.getAll().then(books => {
-      this.setState({books});
+    BooksAPI.update(book, shelf).then(() => {
+      BooksAPI.getAll().then(books => {
+        this.setState({books});
+      });
     });
   };
 
