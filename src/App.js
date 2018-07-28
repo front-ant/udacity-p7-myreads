@@ -11,19 +11,21 @@ class BooksApp extends React.Component {
   };
 
   // Get currently shelved books and set the initial state
-  componentDidMount() {
-    BooksAPI.getAll().then(books => {
-      this.setState({books});
-    });
+  // TODO use async/await
+  async componentDidMount() {
+    const books = await BooksAPI.getAll();
+    this.setState({books});
   }
 
   // function that will be called once the shelf is changed on a single book
+
   updateBook = (book, shelf) => {
-    BooksAPI.update(book, shelf).then(() => {
-      BooksAPI.getAll().then(books => {
-        this.setState({books});
-      });
-    });
+    BooksAPI.update(book, shelf);
+    book.shelf = shelf; // update the local state of the book
+    this.setState(state => ({
+      // after a new book is added from the search page, concat the new book to the existing books' state
+      books: state.books.filter(b => b.id !== book.id).concat(book)
+    }));
   };
 
   render() {
