@@ -1,4 +1,4 @@
-import React, {Component, PureComponent} from 'react';
+import React, {PureComponent} from 'react';
 import ShelfBook from './ShelfBook';
 
 class Book extends PureComponent {
